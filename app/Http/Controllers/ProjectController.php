@@ -13,4 +13,32 @@ class ProjectController extends Controller
         return view('projects.index', compact('projects'));
     }
 
+
+        public function create()
+    {
+        return view('projects.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'status' => 'required|in:pending,in_progress,completed',
+        ]);
+
+        Project::create([
+            'user_id' => auth()->id(),
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? null,
+            'status' => $validated['status'],
+        ]);
+
+        return redirect()
+            ->route('projects.index')
+            ->with('success', 'Project created successfully!');
+    }
+
+
+
 }
