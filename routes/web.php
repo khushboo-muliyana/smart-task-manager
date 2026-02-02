@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +23,13 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::resource('projects', ProjectController::class);
+
+    Route::post('/projects/{project}/tasks', [TaskController::class, 'store'])
+    ->name('tasks.store');
+
+    Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])
+        ->name('tasks.destroy');
+
 });
 
 
