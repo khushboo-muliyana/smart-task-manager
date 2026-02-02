@@ -35,19 +35,39 @@
 
                                 <!-- Task Info -->
                                 <div>
-                                    <p class="font-medium text-gray-900 dark:text-gray-100">
+                                   <span class="font-medium
+                                        @if($task->status === 'completed') line-through text-gray-400 @endif">
                                         {{ $task->title }}
-                                    </p>
+                                    </span>
 
                                     <!-- Task Status -->
-                                    <span
+                                    {{-- <span
                                         class="inline-block mt-1 px-2 py-0.5 text-xs rounded
                                         @if($task->status === 'pending') bg-yellow-100 text-yellow-700
                                         @elseif($task->status === 'in_progress') bg-blue-100 text-blue-700
                                         @else bg-green-100 text-green-700
                                         @endif">
                                         {{ ucfirst(str_replace('_', ' ', $task->status)) }}
-                                    </span>
+                                    </span> --}}
+                                    <form method="POST" action="{{ route('tasks.updateStatus', $task) }}">
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <select name="status"
+                                            onchange="this.form.submit()"
+                                            class="text-xs rounded border-gray-300 focus:ring-blue-500">
+                                        <option value="pending" @selected($task->status === 'pending')>
+                                            Pending
+                                        </option>
+                                        <option value="in_progress" @selected($task->status === 'in_progress')>
+                                            In Progress
+                                        </option>
+                                        <option value="completed" @selected($task->status === 'completed')>
+                                            Completed
+                                        </option>
+                                    </select>
+                                </form>
+
                                 </div>
 
                                 <!-- Delete Task -->
