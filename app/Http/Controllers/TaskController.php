@@ -41,4 +41,22 @@ class TaskController extends Controller
 
         return back()->with('success', 'Task status updated!');
     }
+
+        public function restore($id)
+    {
+        $task = Task::onlyTrashed()->findOrFail($id);
+        $task->restore();
+
+        return back()->with('success', 'Task restored');
+    }
+
+        public function trashed()
+    {
+        // Get only soft-deleted tasks
+        $tasks = Task::onlyTrashed()->get();
+
+        return view('tasks.trashed', compact('tasks'));
+    }
+
+
 }

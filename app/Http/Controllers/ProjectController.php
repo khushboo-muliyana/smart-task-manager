@@ -80,6 +80,23 @@ class ProjectController extends Controller
             ->with('success', 'Project deleted successfully!');
     }
 
+        public function restore($id)
+    {
+        $project = Project::onlyTrashed()->findOrFail($id);
+        $project->restore();
+
+        return redirect()->route('projects.index')
+            ->with('success', 'Project restored successfully');
+    }
+
+        public function trashed()
+    {
+        // Get only soft-deleted projects
+        $projects = Project::onlyTrashed()->get();
+
+        return view('projects.trashed', compact('projects'));
+    }
+
 
 
 }

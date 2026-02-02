@@ -22,7 +22,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::resource('projects', ProjectController::class);
+Route::resource('projects', ProjectController::class)->except(['show']);
 
     Route::post('/projects/{project}/tasks', [TaskController::class, 'store'])
     ->name('tasks.store');
@@ -32,6 +32,20 @@ Route::middleware('auth')->group(function () {
 
     Route::patch('/tasks/{task}/status', [TaskController::class, 'updateStatus'])
     ->name('tasks.updateStatus');
+
+    Route::patch('/projects/{id}/restore', [ProjectController::class, 'restore'])
+    ->name('projects.restore');
+
+    Route::patch('/tasks/{id}/restore', [TaskController::class, 'restore'])
+        ->name('tasks.restore');
+
+    Route::get('/projects/trashed', [ProjectController::class, 'trashed'])
+    ->name('projects.trashed');
+
+    Route::get('/tasks/trashed', [TaskController::class, 'trashed'])
+    ->name('tasks.trashed');
+
+
 
 
 });
