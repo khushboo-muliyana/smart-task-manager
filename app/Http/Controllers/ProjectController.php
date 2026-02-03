@@ -9,7 +9,18 @@ class ProjectController extends Controller
 {
         public function index()
     {
-        $projects = Project::where('user_id', auth()->id())->get();
+        $projects = Project::where('user_id', auth()->id())
+            ->withCount([
+                'tasks',
+                'tasks as completed_tasks_count' => function ($query) {
+                    $query->where('status', 'completed');
+                },
+                'tasks as pending_tasks_count' => function ($query) {
+                    $query->where('status', 'pending');
+                }
+            ])
+            ->get();
+
         return view('projects.index', compact('projects'));
     }
 

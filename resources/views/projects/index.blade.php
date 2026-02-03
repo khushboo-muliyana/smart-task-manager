@@ -103,6 +103,22 @@
                         @enderror
                     </form>
 
+                    <!-- Task Summary -->
+                    <div class="mt-4 text-sm text-gray-600 dark:text-gray-300 flex gap-4">
+                        <span>
+                            🧾 Total: <strong>{{ $project->tasks_count }}</strong>
+                        </span>
+
+                        <span>
+                            ✅ Completed: <strong>{{ $project->completed_tasks_count }}</strong>
+                        </span>
+
+                        <span>
+                            ⏳ Pending: <strong>{{ $project->pending_tasks_count }}</strong>
+                        </span>
+                    </div>
+
+
                     <!-- Project Footer -->
                     <div class="flex justify-between items-center mt-5 pt-3 border-t dark:border-gray-700">
 
