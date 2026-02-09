@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\AiTestController;
+
 
 
 use Illuminate\Support\Facades\Route;
@@ -50,5 +52,6 @@ Route::resource('projects', ProjectController::class)->except(['show']);
 
 });
 
+Route::get('/ai-test', [AiTestController::class, 'test']);
 
 require __DIR__.'/auth.php';
