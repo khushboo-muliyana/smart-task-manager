@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Project;
+use App\Models\Task;
+use App\Services\AiService;
 
 class ProjectController extends Controller
 {
@@ -108,6 +110,31 @@ class ProjectController extends Controller
         return view('projects.trashed', compact('projects'));
     }
 
+        public function generateAiTasks(Project $project, AiService $ai)
+    {
+        $response = $ai->generateTasks($project);
 
+        // Split AI text into lines
+        $lines = preg_split('/\r\n|\r|\n/', $response);
 
+        foreach ($lines as $line) {
+
+            // Clean formatting
+            $clean = trim(
+                preg_replace('/^[\d\-\*\.\s]+/', '', strip_tags($line))
+            );
+
+            // Skip junk lines
+            if(strlen($clean) < 5) continue;
+            if(str_contains(strtolower($clean), 'here are')) continue;
+
+            // Save task
+            $project->tasks()->create([
+                'title' => $clean,
+                'status' => 'pending',
+            ]);
+        }
+
+        return back()->with('success', 'AI tasks generated!');
+    }
 }

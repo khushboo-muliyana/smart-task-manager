@@ -133,22 +133,28 @@
                         </span>
 
                         <!-- Actions -->
-                        <div class="flex gap-4">
-                            <a href="{{ route('projects.edit', $project) }}"
-                               class="text-sm text-indigo-600 hover:underline">
-                                Edit
-                            </a>
+                        <div class="flex gap-4 items-center">
 
-                            <form method="POST"
-                                  action="{{ route('projects.destroy', $project) }}"
-                                  onsubmit="return confirm('Delete this project?')">
-                                @csrf
-                                @method('DELETE')
-                                <button class="text-sm text-red-600 hover:underline">
-                                    Delete
-                                </button>
-                            </form>
-                        </div>
+                                <form method="POST"
+                                    action="{{ route('projects.ai.tasks', $project) }}">
+                                    @csrf
+                                    <button class="bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700">
+                                        AI Tasks
+                                    </button>
+                                </form>
+
+                                <a href="{{ route('projects.edit', $project) }}">
+                                    Edit
+                                </a>
+
+                                <form method="POST"
+                                    action="{{ route('projects.destroy', $project) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button>Delete</button>
+                                </form>
+
+                            </div>
                     </div>
 
                 </div>

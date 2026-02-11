@@ -54,4 +54,8 @@ Route::resource('projects', ProjectController::class)->except(['show']);
 
 Route::get('/ai-test', [AiTestController::class, 'test']);
 
+Route::post('/projects/{project}/ai-tasks',
+    [ProjectController::class, 'generateAiTasks']
+)->name('projects.ai.tasks');
+
 require __DIR__.'/auth.php';

@@ -6,12 +6,13 @@ use Gemini\Laravel\Facades\Gemini;
 
 class AiTestController extends Controller
 {
-    public function test()
-    {
-        // Use 'gemini-2.5-flash' for the stable, fast version
-        $result = Gemini::generativeModel(model: 'gemini-2.5-flash')
-            ->generateContent("Hello from Laravel! Say hi.");
+   public function test()
+{
+    $result = Gemini::generativeModel('gemini-2.5-flash')
+        ->generateContent("Give me 5 short tasks for building a portfolio website. Return as bullet list.");
 
-        return $result->text();
-    }
+    return view('ai-test', [
+        'text' => $result->text()
+    ]);
+}
 }
