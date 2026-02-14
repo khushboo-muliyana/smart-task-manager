@@ -13,7 +13,8 @@ class Project extends Model
         'user_id',
         'name',
         'description',
-        'status'
+        'status',
+        'progress'
     ];
 
     public function user()
@@ -46,6 +47,25 @@ class Project extends Model
             // Restore all soft-deleted tasks
             $project->tasks()->withTrashed()->restore();
         });
+    }
+
+
+        public function updateProgress()
+    {
+        $total = $this->tasks()->count();
+
+        if ($total === 0) {
+            $this->update(['progress' => 0]);
+            return;
+        }
+
+        $completed = $this->tasks()
+            ->where('status', 'completed')
+            ->count();
+
+        $progress = round(($completed / $total) * 100);
+
+        $this->update(['progress' => $progress]);
     }
 }
 

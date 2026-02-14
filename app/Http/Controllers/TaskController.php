@@ -21,12 +21,17 @@ class TaskController extends Controller
             'status' => 'pending',
         ]);
 
+        $project->updateProgress();
         return back()->with('success', 'Task added successfully!');
     }
 
-    public function destroy(Task $task)
+        public function destroy(Task $task)
     {
+        $project = $task->project; 
+
         $task->delete();
+
+        $project->updateProgress();
 
         return back()->with('success', 'Task deleted successfully!');
     }
@@ -41,13 +46,20 @@ class TaskController extends Controller
             'status' => $request->status,
         ]);
 
+        $task->project->updateProgress();
+
         return back()->with('success', 'Task status updated!');
     }
 
-        public function restore($id)
+            public function restore($id)
     {
         $task = Task::onlyTrashed()->findOrFail($id);
+
+        $project = $task->project;
+
         $task->restore();
+
+        $project->updateProgress();
 
         return back()->with('success', 'Task restored');
     }

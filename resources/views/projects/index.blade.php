@@ -123,6 +123,22 @@
                         </span>
                     </div>
 
+                    <!-- Progress Bar -->
+                    <div class="mt-4">
+
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>Progress</span>
+                            <span>{{ $project->progress ?? 0 }}%</span>
+                        </div>
+
+                        <div class="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
+                            <div class="bg-green-500 h-3 rounded-full transition-all duration-500"
+                                style="width: {{ $project->progress ?? 0 }}%">
+                            </div>
+                        </div>
+
+                    </div>
+
 
                     <!-- Project Footer -->
                     <div class="flex justify-between items-center mt-5 pt-3 border-t dark:border-gray-700">
