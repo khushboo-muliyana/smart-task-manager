@@ -58,4 +58,8 @@ Route::post('/projects/{project}/ai-tasks',
     [ProjectController::class, 'generateAiTasks']
 )->name('projects.ai.tasks');
 
+
+Route::post('/tasks/{task}/improve',
+    [TaskController::class, 'improve']
+)->name('tasks.improve');
 require __DIR__.'/auth.php';

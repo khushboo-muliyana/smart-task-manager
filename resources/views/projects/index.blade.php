@@ -40,15 +40,6 @@
                                         {{ $task->title }}
                                     </span>
 
-                                    <!-- Task Status -->
-                                    {{-- <span
-                                        class="inline-block mt-1 px-2 py-0.5 text-xs rounded
-                                        @if($task->status === 'pending') bg-yellow-100 text-yellow-700
-                                        @elseif($task->status === 'in_progress') bg-blue-100 text-blue-700
-                                        @else bg-green-100 text-green-700
-                                        @endif">
-                                        {{ ucfirst(str_replace('_', ' ', $task->status)) }}
-                                    </span> --}}
                                     <form method="POST" action="{{ route('tasks.updateStatus', $task) }}">
                                     @csrf
                                     @method('PATCH')
@@ -70,15 +61,29 @@
 
                                 </div>
 
-                                <!-- Delete Task -->
-                                <form method="POST" action="{{ route('tasks.destroy', $task) }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="text-red-600 text-sm hover:underline">
-                                        Delete
-                                    </button>
-                                </form>
-                            </div>
+                               
+
+                        <div class="flex gap-3">
+
+                            <!-- Improve Task -->
+                            <form method="POST" action="{{ route('tasks.improve', $task) }}">
+                                @csrf
+                                <button class="text-purple-600 text-sm hover:underline">
+                                    Improve
+                                </button>
+                            </form>
+
+                            <!-- Delete Task -->
+                            <form method="POST" action="{{ route('tasks.destroy', $task) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button class="text-red-600 text-sm hover:underline">
+                                    Delete
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
                         @empty
                             <p class="text-sm text-gray-500">No tasks yet</p>
                         @endforelse

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use App\Services\AiService;
+
 
 class TaskController extends Controller
 {
@@ -57,6 +59,25 @@ class TaskController extends Controller
 
         return view('tasks.trashed', compact('tasks'));
     }
+    public function improve(Task $task, AiService $ai)
+    {
+        $project = $task->project;
 
+        $improved = $ai->improveTask(
+            $project->name,
+            $project->description,
+            $task->title
+        );
+
+        // Clean + limit text
+        $improved = trim(strip_tags($improved));
+        $improved = substr($improved, 0, 200);
+
+        $task->update([
+            'title' => $improved
+        ]);
+
+        return back()->with('success', 'Task improved by AI!');
+    }
 
 }
