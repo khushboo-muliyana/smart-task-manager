@@ -49,23 +49,33 @@ class Project extends Model
         });
     }
 
-
-        public function updateProgress()
+    public function updateProgress()
     {
-        $total = $this->tasks()->count();
+        $tasks = $this->tasks()->get();
+        $total = $tasks->count();
 
         if ($total === 0) {
-            $this->update(['progress' => 0]);
+            $this->update(['progress' => 0, 'status' => 'pending']);
             return;
         }
 
-        $completed = $this->tasks()
-            ->where('status', 'completed')
-            ->count();
+        $completed = $tasks->where('status', 'completed')->count();
+        
+        $progress = (int) round(($completed / $total) * 100);
 
-        $progress = round(($completed / $total) * 100);
+        if ($progress >= 100) {
+            $status = 'completed';
+        } elseif ($progress === 0) {
+            $status = 'pending';
+        } else {
+            $status = 'in_progress';
+        }
 
-        $this->update(['progress' => $progress]);
+
+        $this->update([
+            'progress' => $progress,
+            'status' => $status
+        ]);
     }
 }
 

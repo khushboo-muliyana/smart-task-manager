@@ -26,20 +26,6 @@
                         class="w-full border rounded p-2">{{ old('description') }}</textarea>
                 </div>
 
-                <div class="mb-4">
-                    <label class="block mb-1">Status</label>
-                    <select name="status" class="w-full border rounded p-2">
-                        <option value="">Select Status</option>
-                        <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="in_progress" {{ old('status') == 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                        <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Completed</option>
-                    </select>
-
-                    @error('status')
-                        <p class="text-red-500 text-sm">{{ $message }}</p>
-                    @enderror
-                </div>
-
 
                 <button type="submit"class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded shadow">
                 Save Project

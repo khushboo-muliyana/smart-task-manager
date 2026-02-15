@@ -9,22 +9,23 @@ use App\Services\AiService;
 
 class ProjectController extends Controller
 {
-        public function index()
-    {
-        $projects = Project::where('user_id', auth()->id())
-            ->withCount([
-                'tasks',
-                'tasks as completed_tasks_count' => function ($query) {
-                    $query->where('status', 'completed');
-                },
-                'tasks as pending_tasks_count' => function ($query) {
-                    $query->where('status', 'pending');
-                }
-            ])
-            ->get();
+                public function index()
+        {
+            $projects = Project::where('user_id', auth()->id())
+                ->with('tasks') 
+                ->withCount([
+                    'tasks',
+                    'tasks as completed_tasks_count' => function ($query) {
+                        $query->where('status', 'completed');
+                    },
+                    'tasks as pending_tasks_count' => function ($query) {
+                        $query->where('status', 'pending');
+                    }
+                ])
+                ->get();
 
-        return view('projects.index', compact('projects'));
-    }
+            return view('projects.index', compact('projects'));
+        }
 
 
         public function create()
@@ -36,15 +37,15 @@ class ProjectController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'required|in:pending,in_progress,completed',
+            'description' => 'nullable|string'
         ]);
 
         Project::create([
             'user_id' => auth()->id(),
             'name' => $validated['name'],
             'description' => $validated['description'] ?? null,
-            'status' => $validated['status'],
+            'status' => 'pending', 
+            'progress' => 0,
         ]);
 
         return redirect()
@@ -112,8 +113,8 @@ class ProjectController extends Controller
 
         public function generateAiTasks(Project $project, AiService $ai)
     {
-        $response = $ai->generateTasks($project);
-
+        // $response = $ai->generateTasks($project);
+        $response = $ai->generateTasks($project->name, $project->description);
         // Split AI text into lines
         $lines = preg_split('/\r\n|\r|\n/', $response);
 
@@ -135,6 +136,7 @@ class ProjectController extends Controller
             ]);
         }
 
+        $project->updateProgress();
         return back()->with('success', 'AI tasks generated!');
     }
 }
