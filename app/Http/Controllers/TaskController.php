@@ -51,23 +51,29 @@ class TaskController extends Controller
         return back()->with('success', 'Task status updated!');
     }
 
-            public function restore($id)
+    public function restore($id)
     {
-        $task = Task::onlyTrashed()->findOrFail($id);
+        $task = Task::onlyTrashed()
+            ->whereHas('project', function ($q) {
+                $q->where('user_id', auth()->id());
+            })
+            ->findOrFail($id);
 
         $project = $task->project;
 
         $task->restore();
-
         $project->updateProgress();
 
         return back()->with('success', 'Task restored');
     }
 
-        public function trashed()
+    public function trashed()
     {
-        // Get only soft-deleted tasks
-        $tasks = Task::onlyTrashed()->get();
+        $tasks = Task::onlyTrashed()
+            ->whereHas('project', function ($q) {
+                $q->where('user_id', auth()->id());
+            })
+            ->get();
 
         return view('tasks.trashed', compact('tasks'));
     }

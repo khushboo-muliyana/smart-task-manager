@@ -96,7 +96,9 @@ class ProjectController extends Controller
 
         public function restore($id)
     {
-        $project = Project::onlyTrashed()->findOrFail($id);
+        $project = Project::onlyTrashed()
+        ->where('user_id', auth()->id())
+        ->findOrFail($id);
         $project->restore();
 
         return redirect()->route('projects.index')
@@ -105,8 +107,9 @@ class ProjectController extends Controller
 
         public function trashed()
     {
-        // Get only soft-deleted projects
-        $projects = Project::onlyTrashed()->get();
+        $projects = Project::onlyTrashed()
+            ->where('user_id', auth()->id())
+            ->get();
 
         return view('projects.trashed', compact('projects'));
     }
