@@ -9,24 +9,24 @@ use App\Services\AiService;
 
 class ProjectController extends Controller
 {
-                public function index()
-        {
-            $projects = Project::where('user_id', auth()->id())
-                ->with('tasks') 
-                ->withCount([
-                    'tasks',
-                    'tasks as completed_tasks_count' => function ($query) {
-                        $query->where('status', 'completed');
-                    },
-                    'tasks as pending_tasks_count' => function ($query) {
-                        $query->where('status', 'pending');
-                    }
-                ])
-                ->get();
+    public function index()
+    {
+        $projects = Project::where('user_id', auth()->id())
+            ->with('tasks')
+            ->withCount([
+                'tasks',
+                'tasks as completed_tasks_count' => function ($query) {
+                    $query->where('status', 'completed');
+                },
+                'tasks as pending_tasks_count' => function ($query) {
+                    $query->where('status', 'pending');
+                }
+            ])
+            ->latest()
+            ->paginate(5); 
 
-            return view('projects.index', compact('projects'));
-        }
-
+        return view('projects.index', compact('projects'));
+    }
 
         public function create()
     {
