@@ -104,15 +104,18 @@ Completed
 
 <form method="POST" action="{{ route('tasks.improve', $task) }}">
 @csrf
-<button class="text-purple-600 hover:underline">
-Improve
+<button
+title="Improve this task using AI suggestions"
+class="text-purple-600 hover:bg-purple-100 px-2 py-1 rounded transition">
+✨ Improve Task
 </button>
 </form>
 
 <form method="POST" action="{{ route('tasks.destroy', $task) }}">
 @csrf
 @method('DELETE')
-<button class="text-red-600 hover:underline">
+<button
+class="text-red-600 hover:bg-red-100 px-2 py-1 rounded transition">
 Delete
 </button>
 </form>
@@ -204,20 +207,21 @@ style="width: {{ $progress }}%">
 
 <form method="POST" action="{{ route('projects.ai.tasks', $project) }}">
 @csrf
-<button class="bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700">
-AI Tasks
+<button title="Generate smart tasks using AI" class="bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700">
+🤖 Generate Tasks
 </button>
 </form>
 
 <a href="{{ route('projects.edit', $project) }}"
-class="text-blue-600 hover:underline">
+class="text-blue-600 hover:bg-blue-100 px-2 py-1 rounded transition">
 Edit
 </a>
 
 <form method="POST" action="{{ route('projects.destroy', $project) }}">
 @csrf
 @method('DELETE')
-<button class="text-red-600 hover:underline">
+<button
+class="text-red-600 hover:bg-red-100 px-2 py-1 rounded transition">
 Delete
 </button>
 </form>
