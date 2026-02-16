@@ -1,50 +1,83 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Trashed Tasks
-        </h2>
-    </x-slot>
 
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if(session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                    {{ session('success') }}
-                </div>
-            @endif
+<x-slot name="header">
+<h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+🗑 Trashed Tasks
+</h2>
+</x-slot>
 
-            @if($tasks->count() > 0)
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Task Name</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deleted At</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach($tasks as $task)
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $task->title }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $task->deleted_at->format('d M Y, H:i') }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <form action="{{ route('tasks.restore', $task->id) }}" method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
-                                                Restore
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @else
-                <p class="text-gray-500 mt-4">No trashed tasks found.</p>
-            @endif
-        </div>
-    </div>
+<div class="py-6">
+<div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+
+{{-- Success message --}}
+@if(session('success'))
+<div class="mb-5 p-4 rounded-xl bg-green-100 text-green-800 shadow">
+{{ session('success') }}
+</div>
+@endif
+
+
+{{-- EMPTY STATE --}}
+@if($tasks->isEmpty())
+
+<div class="bg-white dark:bg-gray-800 p-10 rounded-2xl shadow text-center">
+
+<div class="text-5xl mb-3">🧹</div>
+
+<h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+No trashed tasks
+</h3>
+
+<p class="text-gray-500 dark:text-gray-400">
+Deleted tasks will appear here.
+</p>
+
+</div>
+
+@else
+
+
+{{-- TASK LIST --}}
+<div class="space-y-4">
+
+@foreach($tasks as $task)
+
+<div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow border dark:border-gray-700 flex justify-between items-center">
+
+<div>
+
+<h3 class="font-semibold text-gray-800 dark:text-gray-200">
+{{ $task->title }}
+</h3>
+
+<p class="text-sm text-gray-500 mt-1">
+Deleted: {{ $task->deleted_at->format('d M Y, H:i') }}
+</p>
+
+</div>
+
+
+{{-- Restore button --}}
+<form action="{{ route('tasks.restore', $task->id) }}" method="POST">
+@csrf
+@method('PATCH')
+
+<button
+class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow transition">
+♻ Restore
+</button>
+
+</form>
+
+</div>
+
+@endforeach
+
+</div>
+
+@endif
+
+</div>
+</div>
+
 </x-app-layout>
